@@ -1,0 +1,31 @@
+{
+  "name": "search-cashback-injector",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MV3 Chrome extension that detects supported merchants on Google Search and injects inline cashback banners.",
+  "scripts": {
+    "build": "BUILD_TARGET=background vite build && BUILD_TARGET=content vite build",
+    "build:bg": "BUILD_TARGET=background vite build",
+    "build:content": "BUILD_TARGET=content vite build",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src tests",
+    "lint:fix": "eslint src tests --fix",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "ci": "npm run type-check && npm run lint && npm run test && npm run build"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@types/chrome": "^0.0.332",
+    "@types/node": "^22.0.0",
+    "@vitest/coverage-v8": "^2.1.9",
+    "eslint": "^9.0.0",
+    "globals": "^15.0.0",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.0.0",
+    "vite": "^5.4.0",
+    "vite-plugin-static-copy": "^2.0.0",
+    "vitest": "^2.1.9"
+  }
+}

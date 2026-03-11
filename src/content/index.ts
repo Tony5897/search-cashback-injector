@@ -8,7 +8,8 @@ const RESULT_SELECTOR = '#search .g'
 function main(): void {
   scanResults()
   const target = document.getElementById('search') ?? document.body
-  const observer = new MutationObserver(() => scanResults())
+  // Block body required — arrow shorthand returning void is confusing.
+  const observer = new MutationObserver(() => { scanResults() })
   observer.observe(target, { childList: true, subtree: true })
 }
 
@@ -45,7 +46,9 @@ function processResult(result: HTMLElement): void {
 
 async function requestOffer(domain: string): Promise<OfferResponse> {
   const message: ExtensionMessage = { type: 'RESOLVE_OFFER', payload: { domain } }
-  return chrome.runtime.sendMessage(message) as Promise<OfferResponse>
+  // Await into unknown, then assert — avoids redundant Promise<any> cast.
+  const response: unknown = await chrome.runtime.sendMessage(message)
+  return response as OfferResponse
 }
 
 function injectBanner(result: HTMLElement, label: string): void {

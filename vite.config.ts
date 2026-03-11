@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
 import { resolve } from 'node:path'
-import { viteStaticCopy } from 'vite-plugin-static-copy'
+import { cpSync, mkdirSync } from 'node:fs'
 
 const target = process.env['BUILD_TARGET']
 
@@ -12,6 +12,21 @@ if (target !== 'background' && target !== 'content') {
 
 const isBackground = target === 'background'
 
+/**
+ * Copies manifest.json and icon assets into dist/ at the end of the content build.
+ * Uses Node built-ins only — no external ESM-only dependency required.
+ */
+function copyExtensionAssets(): Plugin {
+  return {
+    name: 'copy-extension-assets',
+    closeBundle() {
+      cpSync('manifest.json', 'dist/manifest.json')
+      mkdirSync('dist/icons', { recursive: true })
+      cpSync('public/icons', 'dist/icons', { recursive: true })
+    },
+  }
+}
+
 export default defineConfig({
   resolve: {
     alias: { '@': resolve(__dirname, 'src') },
@@ -19,8 +34,8 @@ export default defineConfig({
 
   build: {
     outDir: 'dist',
-    // The background build runs first and clears dist/.
-    // The content build runs second and adds to it.
+    // Background build runs first and clears dist/.
+    // Content build runs second and adds to it.
     emptyOutDir: isBackground,
     sourcemap: true,
     minify: false,
@@ -47,16 +62,5 @@ export default defineConfig({
         },
   },
 
-  plugins: isBackground
-    ? []
-    : [
-        viteStaticCopy({
-          targets: [
-            // Copy manifest.json from repo root → dist/
-            { src: 'manifest.json', dest: '.' },
-            // Copy icon assets → dist/icons/
-            { src: 'public/icons', dest: '.' },
-          ],
-        }),
-      ],
+  plugins: isBackground ? [] : [copyExtensionAssets()],
 })

@@ -5,7 +5,9 @@ import { resolve } from 'node:path'
 // that runs at module evaluation time.
 export default defineConfig({
   test: {
-    environment: 'jsdom',
+    // Current tests cover pure utility functions — no DOM needed.
+    // Add @vitest-environment happy-dom to individual test files when DOM is required.
+    environment: 'node',
     include: ['tests/unit/**/*.test.ts'],
     coverage: {
       provider: 'v8',

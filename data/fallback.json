@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "offers": [
+    { "domain": "amazon.com",  "label": "Earn 3% cashback at Amazon",    "rate": "3%"   },
+    { "domain": "walmart.com", "label": "Earn 2% cashback at Walmart",   "rate": "2%"   },
+    { "domain": "target.com",  "label": "Earn 2.5% cashback at Target",  "rate": "2.5%" },
+    { "domain": "bestbuy.com", "label": "Earn 1.5% cashback at Best Buy","rate": "1.5%" },
+    { "domain": "nike.com",    "label": "Earn 4% cashback at Nike",      "rate": "4%"   }
+  ]
+}

@@ -1,25 +1,46 @@
-import { defineConfig, type Plugin } from 'vite'
+import { defineConfig, build, type Plugin } from 'vite'
 import { resolve } from 'node:path'
 import { cpSync, mkdirSync } from 'node:fs'
 
-const target = process.env['BUILD_TARGET']
-
-if (target !== 'background' && target !== 'content') {
-  throw new Error(
-    `BUILD_TARGET must be "background" or "content", got: "${String(target)}"`,
-  )
-}
-
-const isBackground = target === 'background'
-
 /**
- * Copies manifest.json and icon assets into dist/ at the end of the content build.
- * Uses Node built-ins only — no external ESM-only dependency required.
+ * After the background service worker is bundled, this plugin:
+ *   1. Compiles the content script as a self-contained IIFE (no code-splitting).
+ *   2. Copies manifest.json and icons into dist/.
+ *
+ * Running both targets from a single `vite build` call keeps the build script
+ * simple while preserving the format difference MV3 requires: the background
+ * service worker must be an ES module, content scripts must be classic scripts.
  */
-function copyExtensionAssets(): Plugin {
+function buildContentAndAssets(): Plugin {
+  let hasRun = false
   return {
-    name: 'copy-extension-assets',
-    closeBundle() {
+    name: 'build-content-and-assets',
+    async closeBundle() {
+      if (hasRun) return
+      hasRun = true
+
+      await build({
+        configFile: false,
+        resolve: {
+          alias: { '@': resolve(__dirname, 'src') },
+        },
+        build: {
+          outDir: 'dist',
+          emptyOutDir: false,
+          sourcemap: true,
+          minify: false,
+          target: 'esnext',
+          rollupOptions: {
+            input: resolve(__dirname, 'src/content/index.ts'),
+            output: {
+              format: 'iife',
+              entryFileNames: 'content.js',
+              inlineDynamicImports: true,
+            },
+          },
+        },
+      })
+
       cpSync('manifest.json', 'dist/manifest.json')
       mkdirSync('dist/icons', { recursive: true })
       cpSync('public/icons', 'dist/icons', { recursive: true })
@@ -34,33 +55,20 @@ export default defineConfig({
 
   build: {
     outDir: 'dist',
-    // Background build runs first and clears dist/.
-    // Content build runs second and adds to it.
-    emptyOutDir: isBackground,
+    emptyOutDir: true,
     sourcemap: true,
     minify: false,
     target: 'esnext',
 
-    rollupOptions: isBackground
-      ? {
-          input: resolve(__dirname, 'src/background/index.ts'),
-          output: {
-            format: 'es',
-            entryFileNames: 'background/index.js',
-            // Keep the service worker self-contained — no dynamic chunks.
-            inlineDynamicImports: true,
-          },
-        }
-      : {
-          input: resolve(__dirname, 'src/content/index.ts'),
-          output: {
-            // Content scripts cannot be ES modules — IIFE required.
-            format: 'iife',
-            entryFileNames: 'content/index.js',
-            inlineDynamicImports: true,
-          },
-        },
+    rollupOptions: {
+      input: resolve(__dirname, 'src/background/index.ts'),
+      output: {
+        format: 'es',
+        entryFileNames: 'background.js',
+        inlineDynamicImports: true,
+      },
+    },
   },
 
-  plugins: isBackground ? [] : [copyExtensionAssets()],
+  plugins: [buildContentAndAssets()],
 })

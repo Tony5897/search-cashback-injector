@@ -4,16 +4,16 @@
   "private": true,
   "description": "MV3 Chrome extension that detects supported merchants on Google Search and injects inline cashback banners.",
   "scripts": {
-    "build": "BUILD_TARGET=background vite build && BUILD_TARGET=content vite build",
-    "build:bg": "BUILD_TARGET=background vite build",
-    "build:content": "BUILD_TARGET=content vite build",
-    "type-check": "tsc --noEmit",
-    "lint": "eslint src tests",
+    "dev": "vite build --watch",
+    "build": "vite build",
+    "preview": "vite build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src tests --max-warnings 0",
     "lint:fix": "eslint src tests --fix",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "ci": "npm run type-check && npm run lint && npm run test && npm run build"
+    "ci": "npm run typecheck && npm run lint && npm run test && npm run build"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",

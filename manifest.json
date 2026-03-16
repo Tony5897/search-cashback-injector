@@ -6,13 +6,13 @@
   "permissions": ["storage"],
   "host_permissions": ["https://www.google.com/*"],
   "background": {
-    "service_worker": "background/index.js",
+    "service_worker": "background.js",
     "type": "module"
   },
   "content_scripts": [
     {
       "matches": ["https://www.google.com/search*"],
-      "js": ["content/index.js"],
+      "js": ["content.js"],
       "run_at": "document_idle"
     }
   ],

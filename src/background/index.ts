@@ -1,7 +1,10 @@
 import { findMerchant } from '@/lib/merchants'
 import { buildOffer } from '@/lib/offers'
+import { createLogger } from '@/lib/logger'
+import { storageGet, storageSet } from '@/lib/storage'
 import type { ExtensionMessage, OfferResponse } from '@/lib/types'
 
+const log = createLogger('background')
 const CACHE_TTL_MS = 60 * 60 * 1000 // 1 hour
 
 chrome.runtime.onMessage.addListener(
@@ -20,7 +23,7 @@ chrome.runtime.onMessage.addListener(
     resolveOffer(msg.payload.domain)
       .then(sendResponse)
       .catch((err: unknown) => {
-        console.error('[cashback] offer resolution failed', err)
+        log.error('offer resolution failed', err)
         sendResponse({ offer: null } satisfies OfferResponse)
       })
 
@@ -31,28 +34,21 @@ chrome.runtime.onMessage.addListener(
 
 async function resolveOffer(domain: string): Promise<OfferResponse> {
   const cacheKey = `offer:${domain}`
-  const cached = await readCache<OfferResponse>(cacheKey)
-  if (cached) return cached
+  const cached = await storageGet<OfferResponse>(cacheKey)
 
+  if (cached) {
+    log.debug('cache hit', { domain })
+    return cached
+  }
+
+  log.debug('cache miss', { domain })
   const merchant = findMerchant(domain)
   const result: OfferResponse = { offer: merchant ? buildOffer(merchant) : null }
 
   if (result.offer) {
-    await writeCache(cacheKey, result, CACHE_TTL_MS)
+    await storageSet(cacheKey, result, CACHE_TTL_MS)
+    log.info('offer resolved', { domain, rate: result.offer.rate })
   }
 
   return result
-}
-
-async function readCache<T>(key: string): Promise<T | null> {
-  const stored = await chrome.storage.local.get(key)
-  const entry = stored[key] as { value: T; expiresAt: number } | undefined
-  if (!entry || Date.now() > entry.expiresAt) return null
-  return entry.value
-}
-
-async function writeCache(key: string, value: unknown, ttlMs: number): Promise<void> {
-  await chrome.storage.local.set({
-    [key]: { value, expiresAt: Date.now() + ttlMs },
-  })
 }

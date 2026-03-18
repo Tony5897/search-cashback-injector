@@ -1,6 +1,9 @@
-import { extractDomain } from '@/lib/domains'
 import type { ExtensionMessage, OfferResponse } from '@/lib/types'
+import { createLogger } from '@/lib/logger'
+import { extractResultDomain } from '@/lib/serp'
 import bannerCss from '@/styles/banner.css?inline'
+
+const log = createLogger('content')
 
 const INJECTED_ATTR = 'data-cashback-injected'
 const RESULT_SELECTOR = '#search .g'
@@ -14,16 +17,15 @@ function main(): void {
 }
 
 function scanResults(): void {
-  document.querySelectorAll<HTMLElement>(RESULT_SELECTOR).forEach(processResult)
+  const results = document.querySelectorAll<HTMLElement>(RESULT_SELECTOR)
+  log.debug('scanning results', { count: results.length })
+  results.forEach(processResult)
 }
 
 function processResult(result: HTMLElement): void {
   if (result.hasAttribute(INJECTED_ATTR)) return
 
-  const link = result.querySelector<HTMLAnchorElement>('a[href]')
-  if (!link?.href) return
-
-  const domain = extractDomain(link.href)
+  const domain = extractResultDomain(result)
   if (!domain) return
 
   // Mark pending to prevent duplicate processing while the async call resolves.
@@ -35,11 +37,12 @@ function processResult(result: HTMLElement): void {
         result.removeAttribute(INJECTED_ATTR)
         return
       }
+      log.info('merchant detected', { domain, rate: offer.rate })
       injectBanner(result, offer.label)
       result.setAttribute(INJECTED_ATTR, 'injected')
     })
     .catch((err: unknown) => {
-      console.error('[cashback] failed to resolve offer', err)
+      log.error('failed to resolve offer', err)
       result.removeAttribute(INJECTED_ATTR)
     })
 }

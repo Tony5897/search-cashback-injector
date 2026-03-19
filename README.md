@@ -151,3 +151,6 @@ search-cashback-injector/
 ├── .gitignore
 └── README.md
 ```
+## The Progress
+
+<img width="1663" height="1451" alt="image" src="https://github.com/user-attachments/assets/bf2ed0b0-6c48-4e8c-b262-faa680696bee" />

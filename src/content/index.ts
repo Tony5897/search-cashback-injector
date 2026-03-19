@@ -6,7 +6,7 @@ import bannerCss from '@/styles/banner.css?inline'
 const log = createLogger('content')
 
 const INJECTED_ATTR = 'data-cashback-injected'
-const RESULT_SELECTOR = '#search .g'
+const RESULT_SELECTOR = '#rso .tF2Cxc'
 
 function main(): void {
   scanResults()

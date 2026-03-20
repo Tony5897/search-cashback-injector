@@ -12,9 +12,12 @@ const RESULT_SELECTOR = '#rso .tF2Cxc'
 function main(): void {
   scanResults()
   const target = document.getElementById('search') ?? document.body
-  // Block body required — arrow shorthand returning void is confusing.
   const observer = new MutationObserver(() => { scanResults() })
   observer.observe(target, { childList: true, subtree: true })
+
+  // Disconnect observer when the page is torn down to prevent memory leaks
+  // during SPA-style navigations within Google Search.
+  window.addEventListener('pagehide', () => { observer.disconnect() }, { once: true })
 }
 
 function scanResults(): void {

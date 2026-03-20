@@ -1,6 +1,6 @@
 {
   "name": "search-cashback-injector",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "MV3 Chrome extension that detects supported merchants on Google Search and injects inline cashback banners.",
   "scripts": {

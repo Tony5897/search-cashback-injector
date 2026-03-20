@@ -37,7 +37,7 @@ function processResult(result: HTMLElement): void {
         result.removeAttribute(INJECTED_ATTR)
         return
       }
-      log.info('merchant detected', { domain, rate: offer.rate })
+      log.info('merchant detected', { domain, cashbackPercent: offer.cashbackPercent })
       injectBanner(result, offer.label)
       result.setAttribute(INJECTED_ATTR, 'injected')
     })

@@ -1,11 +1,14 @@
-import type { Merchant, Offer } from './types'
+import type { Merchant, Offer, FallbackData } from './types'
 import fallbackData from '../../data/fallback.json'
 
+const fallback = fallbackData as FallbackData
+
 export function buildOffer(merchant: Merchant): Offer {
-  const fallback = fallbackData.offers.find(o => o.domain === merchant.domain)
+  const entry = fallback.offers.find(o => merchant.domains.includes(o.domain))
   return {
     merchant,
-    label: fallback?.label ?? `Earn ${merchant.cashbackRate} cashback at ${merchant.name}`,
-    rate: fallback?.rate ?? merchant.cashbackRate,
+    label: entry?.label ?? `Earn ${String(merchant.cashbackPercent)}% cashback at ${merchant.name}`,
+    cashbackPercent: entry?.cashbackPercent ?? merchant.cashbackPercent,
+    source: 'registry',
   }
 }

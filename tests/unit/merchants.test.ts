@@ -20,8 +20,8 @@ describe('findMerchant', () => {
     expect(findMerchant('example.com')).toBeNull()
   })
 
-  it('returns the correct cashback rate for a matched merchant', () => {
-    expect(findMerchant('nike.com')?.cashbackRate).toBe('4%')
+  it('returns the correct cashback percent for a matched merchant', () => {
+    expect(findMerchant('nike.com')?.cashbackPercent).toBe(4)
   })
 
   it('registry contains at least 5 merchants', () => {

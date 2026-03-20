@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Search Cashback Injector",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Detects supported merchants on Google Search results and surfaces inline cashback offers.",
   "permissions": ["storage"],
   "host_permissions": ["https://www.google.com/*"],

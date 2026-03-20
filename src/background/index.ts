@@ -1,5 +1,4 @@
-import { findMerchant } from '@/lib/merchants'
-import { buildOffer } from '@/lib/offers'
+import { resolveOffer } from '@/lib/offers'
 import { createLogger } from '@/lib/logger'
 import { storageGet, storageSet } from '@/lib/storage'
 import type { ExtensionMessage, OfferResponse } from '@/lib/types'
@@ -20,7 +19,7 @@ chrome.runtime.onMessage.addListener(
 
     const msg = message as ExtensionMessage
 
-    resolveOffer(msg.payload.domain)
+    handleResolveOffer(msg.payload.domain)
       .then(sendResponse)
       .catch((err: unknown) => {
         log.error('offer resolution failed', err)
@@ -32,7 +31,7 @@ chrome.runtime.onMessage.addListener(
   },
 )
 
-async function resolveOffer(domain: string): Promise<OfferResponse> {
+async function handleResolveOffer(domain: string): Promise<OfferResponse> {
   const cacheKey = `offer:${domain}`
   const cached = await storageGet<OfferResponse>(cacheKey)
 
@@ -42,12 +41,12 @@ async function resolveOffer(domain: string): Promise<OfferResponse> {
   }
 
   log.debug('cache miss', { domain })
-  const merchant = findMerchant(domain)
-  const result: OfferResponse = { offer: merchant ? buildOffer(merchant) : null }
+  const offer = resolveOffer(domain)
+  const result: OfferResponse = { offer }
 
-  if (result.offer) {
+  if (offer) {
     await storageSet(cacheKey, result, CACHE_TTL_MS)
-    log.info('offer resolved', { domain, cashbackPercent: result.offer.cashbackPercent })
+    log.info('offer resolved', { domain, cashbackPercent: offer.cashbackPercent, source: offer.source })
   }
 
   return result

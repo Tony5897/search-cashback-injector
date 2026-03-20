@@ -1,3 +1,4 @@
+import { isOfferResponse } from '@/lib/types'
 import type { ExtensionMessage, OfferResponse } from '@/lib/types'
 import { createLogger } from '@/lib/logger'
 import { extractResultDomain } from '@/lib/serp'
@@ -49,9 +50,19 @@ function processResult(result: HTMLElement): void {
 
 async function requestOffer(domain: string): Promise<OfferResponse> {
   const message: ExtensionMessage = { type: 'RESOLVE_OFFER', payload: { domain } }
-  // Await into unknown, then assert — avoids redundant Promise<any> cast.
   const response: unknown = await chrome.runtime.sendMessage(message)
-  return response as OfferResponse
+
+  if (chrome.runtime.lastError) {
+    log.warn('sendMessage error', chrome.runtime.lastError.message)
+    return { offer: null }
+  }
+
+  if (!isOfferResponse(response)) {
+    log.warn('unexpected response shape', response)
+    return { offer: null }
+  }
+
+  return response
 }
 
 function injectBanner(result: HTMLElement, label: string): void {

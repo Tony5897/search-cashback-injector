@@ -1,25 +1,17 @@
 import { resolveOffer } from '@/lib/offers'
 import { createLogger } from '@/lib/logger'
 import { storageGet, storageSet } from '@/lib/storage'
-import type { ExtensionMessage, OfferResponse } from '@/lib/types'
+import { isExtensionMessage } from '@/lib/types'
+import type { OfferResponse } from '@/lib/types'
 
 const log = createLogger('background')
 const CACHE_TTL_MS = 60 * 60 * 1000 // 1 hour
 
 chrome.runtime.onMessage.addListener(
   (message: unknown, _sender, sendResponse) => {
-    // Narrow the unknown message before casting — avoids always-false condition.
-    if (
-      typeof message !== 'object' ||
-      message === null ||
-      (message as { type?: string }).type !== 'RESOLVE_OFFER'
-    ) {
-      return false
-    }
+    if (!isExtensionMessage(message)) return false
 
-    const msg = message as ExtensionMessage
-
-    handleResolveOffer(msg.payload.domain)
+    handleResolveOffer(message.payload.domain)
       .then(sendResponse)
       .catch((err: unknown) => {
         log.error('offer resolution failed', err)

@@ -3,36 +3,36 @@ import type { Merchant } from './types'
 
 export const MERCHANT_REGISTRY: ReadonlyArray<Merchant> = [
   // Retail
-  { domain: 'amazon.com',    name: 'Amazon',      cashbackRate: '3%',   category: 'retail'      },
-  { domain: 'walmart.com',   name: 'Walmart',     cashbackRate: '2%',   category: 'retail'      },
-  { domain: 'target.com',    name: 'Target',      cashbackRate: '2.5%', category: 'retail'      },
-  { domain: 'ebay.com',      name: 'eBay',        cashbackRate: '2%',   category: 'retail'      },
-  { domain: 'etsy.com',      name: 'Etsy',        cashbackRate: '3%',   category: 'retail'      },
-  { domain: 'costco.com',    name: 'Costco',      cashbackRate: '1%',   category: 'retail'      },
+  { id: 'amazon',    name: 'Amazon',      domains: ['amazon.com'],    cashbackPercent: 3,   category: 'retail'      },
+  { id: 'walmart',   name: 'Walmart',     domains: ['walmart.com'],   cashbackPercent: 2,   category: 'retail'      },
+  { id: 'target',    name: 'Target',      domains: ['target.com'],    cashbackPercent: 2.5, category: 'retail'      },
+  { id: 'ebay',      name: 'eBay',        domains: ['ebay.com'],      cashbackPercent: 2,   category: 'retail'      },
+  { id: 'etsy',      name: 'Etsy',        domains: ['etsy.com'],      cashbackPercent: 3,   category: 'retail'      },
+  { id: 'costco',    name: 'Costco',      domains: ['costco.com'],    cashbackPercent: 1,   category: 'retail'      },
   // Electronics
-  { domain: 'bestbuy.com',   name: 'Best Buy',    cashbackRate: '1.5%', category: 'electronics' },
+  { id: 'bestbuy',   name: 'Best Buy',    domains: ['bestbuy.com'],   cashbackPercent: 1.5, category: 'electronics' },
   // Apparel & Sports
-  { domain: 'nike.com',      name: 'Nike',        cashbackRate: '4%',   category: 'apparel'     },
-  { domain: 'adidas.com',    name: 'Adidas',      cashbackRate: '5%',   category: 'sports'      },
-  { domain: 'macys.com',     name: "Macy's",      cashbackRate: '3%',   category: 'apparel'     },
-  { domain: 'nordstrom.com', name: 'Nordstrom',   cashbackRate: '3%',   category: 'apparel'     },
+  { id: 'nike',      name: 'Nike',        domains: ['nike.com'],      cashbackPercent: 4,   category: 'apparel'     },
+  { id: 'adidas',    name: 'Adidas',      domains: ['adidas.com'],    cashbackPercent: 5,   category: 'sports'      },
+  { id: 'macys',     name: "Macy's",      domains: ['macys.com'],     cashbackPercent: 3,   category: 'apparel'     },
+  { id: 'nordstrom', name: 'Nordstrom',   domains: ['nordstrom.com'], cashbackPercent: 3,   category: 'apparel'     },
   // Home & Hardware
-  { domain: 'homedepot.com', name: 'Home Depot',  cashbackRate: '2%',   category: 'home'        },
-  { domain: 'lowes.com',     name: "Lowe's",      cashbackRate: '2%',   category: 'home'        },
+  { id: 'homedepot', name: 'Home Depot',  domains: ['homedepot.com'], cashbackPercent: 2,   category: 'home'        },
+  { id: 'lowes',     name: "Lowe's",      domains: ['lowes.com'],     cashbackPercent: 2,   category: 'home'        },
   // Travel
-  { domain: 'expedia.com',   name: 'Expedia',     cashbackRate: '5%',   category: 'travel'      },
-  { domain: 'hotels.com',    name: 'Hotels.com',  cashbackRate: '5%',   category: 'travel'      },
-  { domain: 'booking.com',   name: 'Booking.com', cashbackRate: '4%',   category: 'travel'      },
+  { id: 'expedia',   name: 'Expedia',     domains: ['expedia.com'],   cashbackPercent: 5,   category: 'travel'      },
+  { id: 'hotels',    name: 'Hotels.com',  domains: ['hotels.com'],    cashbackPercent: 5,   category: 'travel'      },
+  { id: 'booking',   name: 'Booking.com', domains: ['booking.com'],   cashbackPercent: 4,   category: 'travel'      },
   // Food & Grocery
-  { domain: 'doordash.com',  name: 'DoorDash',    cashbackRate: '3%',   category: 'food'        },
-  { domain: 'instacart.com', name: 'Instacart',   cashbackRate: '2%',   category: 'food'        },
+  { id: 'doordash',  name: 'DoorDash',    domains: ['doordash.com'],  cashbackPercent: 3,   category: 'food'        },
+  { id: 'instacart', name: 'Instacart',   domains: ['instacart.com'], cashbackPercent: 2,   category: 'food'        },
   // Gaming
-  { domain: 'gamestop.com',  name: 'GameStop',    cashbackRate: '2%',   category: 'gaming'      },
+  { id: 'gamestop',  name: 'GameStop',    domains: ['gamestop.com'],  cashbackPercent: 2,   category: 'gaming'      },
   // Beauty
-  { domain: 'sephora.com',   name: 'Sephora',     cashbackRate: '4%',   category: 'beauty'      },
+  { id: 'sephora',   name: 'Sephora',     domains: ['sephora.com'],   cashbackPercent: 4,   category: 'beauty'      },
 ]
 
 export function findMerchant(domain: string): Merchant | null {
   const normalized = normalizeDomain(domain)
-  return MERCHANT_REGISTRY.find(m => m.domain === normalized) ?? null
+  return MERCHANT_REGISTRY.find(m => m.domains.includes(normalized)) ?? null
 }

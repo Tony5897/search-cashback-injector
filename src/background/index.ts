@@ -47,7 +47,7 @@ async function resolveOffer(domain: string): Promise<OfferResponse> {
 
   if (result.offer) {
     await storageSet(cacheKey, result, CACHE_TTL_MS)
-    log.info('offer resolved', { domain, rate: result.offer.rate })
+    log.info('offer resolved', { domain, cashbackPercent: result.offer.cashbackPercent })
   }
 
   return result

@@ -55,13 +55,16 @@ describe('storageGet', () => {
   })
 
   it('passes the generic type through — returned value matches stored shape', async () => {
-    const merchant = { domain: 'amazon.com', name: 'Amazon', cashbackRate: '3%', category: 'retail' }
-    const offer = { merchant, label: 'Earn 3% cashback at Amazon', rate: '3%' }
+    const merchant = {
+      id: 'amazon', name: 'Amazon', domains: ['amazon.com'],
+      cashbackPercent: 3, category: 'retail',
+    }
+    const offer = { merchant, label: 'Earn 3% cashback at Amazon', cashbackPercent: 3, source: 'registry' as const }
     const value = { offer }
     mockStore['offer:amazon.com'] = { value, expiresAt: Date.now() + 3_600_000 }
 
     const result = await storageGet<typeof value>('offer:amazon.com')
-    expect(result?.offer.rate).toBe('3%')
+    expect(result?.offer.cashbackPercent).toBe(3)
   })
 })
 

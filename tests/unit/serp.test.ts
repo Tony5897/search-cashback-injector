@@ -45,6 +45,18 @@ describe('extractResultDomain', () => {
     expect(extractResultDomain(makeEl(href))).toBe('target.com')
   })
 
+  it('resolves domain from a google.com/url? redirect with extra params before q', () => {
+    const href = 'https://www.google.com/url?sa=t&rct=j&q=https://walmart.com/deals&ved=abc'
+    expect(extractResultDomain(makeEl(href))).toBe('walmart.com')
+  })
+
+  it('does not misidentify a merchant URL containing /url?q= in its own path as a redirect', () => {
+    // Regression: the old href.includes('/url?q=') condition would have treated this
+    // as a Google redirect and returned null instead of the correct merchant domain.
+    const href = 'https://merchant.com/search/url?q=running+shoes'
+    expect(extractResultDomain(makeEl(href))).toBe('merchant.com')
+  })
+
   it('returns null for a google.com internal link', () => {
     expect(extractResultDomain(makeEl('https://www.google.com/search?q=laptops'))).toBeNull()
   })

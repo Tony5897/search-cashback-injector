@@ -40,14 +40,13 @@ export function extractResultDomain(resultEl: Element): string | null {
 }
 
 /**
- * If the href is a Google redirect (/url?q=... or ...google.com/url?q=...),
+ * If the href is a Google redirect (/url?q=... or https://www.google.com/url?q=...),
  * returns the value of the `q` parameter. Otherwise returns the href as-is.
  */
 function resolveHref(href: string): string | null {
   const isRedirect =
     href.startsWith('/url?') ||
-    href.startsWith('/url?') ||
-    href.includes('/url?q=')
+    href.startsWith('https://www.google.com/url?')
 
   if (!isRedirect) return href
 

@@ -6,7 +6,7 @@ import bannerCss from '@/styles/banner.css?inline'
 
 const log = createLogger('content')
 
-const INJECTED_ATTR = 'data-cashback-injected'
+const INJECTED_ATTR = 'data-perkpop-injected'
 const RESULT_SELECTOR = '#rso .tF2Cxc'
 
 function main(): void {
@@ -76,7 +76,7 @@ function injectBanner(result: HTMLElement, label: string): void {
   style.textContent = bannerCss
 
   const banner = document.createElement('div')
-  banner.className = 'cashback-banner'
+  banner.className = 'perkpop-banner'
   banner.textContent = `\u{1F4B0} ${label}`
 
   shadow.append(style, banner)

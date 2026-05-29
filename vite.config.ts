@@ -27,7 +27,7 @@ function buildContentAndAssets(): Plugin {
         build: {
           outDir: 'dist',
           emptyOutDir: false,
-          sourcemap: true,
+          sourcemap: false,
           minify: false,
           target: 'esnext',
           rollupOptions: {
@@ -56,7 +56,7 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
-    sourcemap: true,
+    sourcemap: false,
     minify: false,
     target: 'esnext',
 

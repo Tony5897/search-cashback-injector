@@ -1,6 +1,6 @@
-# Search Cashback Injector
+# PerkPop
 
-A Manifest V3 browser extension that detects supported merchant links on Google Search results pages and injects lightweight cashback alerts inline with search results.
+A Manifest V3 Chrome extension that detects supported merchants on Google Search results and surfaces inline cashback banners — so you never miss savings.
 
 This project is designed as a portfolio-grade engineering build focused on modern browser extension architecture, safe DOM injection, configuration-driven merchant handling, and production-minded frontend discipline.
 
@@ -121,7 +121,7 @@ A lightweight banner is injected into supported results using an isolated DOM st
 ## Project Structure
 
 ```text
-search-cashback-injector/
+perkpop/
 ├── .github/
 │   └── workflows/
 │       └── ci.yml

@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2026-05-29
+
+### Changed
+- Rebranded from "Search Cashback Injector" to **PerkPop**
+- Extension `name` in `manifest.json` updated to `"PerkPop"`
+- Package `name` updated to `"perkpop"`
+- DOM marker attribute renamed from `data-cashback-injected` to `data-perkpop-injected`
+- CSS class `.cashback-banner` renamed to `.perkpop-banner`
+- Banner color palette updated from green to navy/blue to match PerkPop brand identity
+- Extension icons replaced with the PerkPop logo (navy circle with dollar sign)
+
 ## [0.2.0] - 2026-03-20
 
 ### Added

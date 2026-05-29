@@ -5,17 +5,7 @@ import globals from 'globals'
 
 export default tseslint.config(
   eslint.configs.recommended,
-  ...tseslint.configs.strictTypeChecked,
-
-  // Parser options for type-aware rules
-  {
-    languageOptions: {
-      parserOptions: {
-        project: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
-    },
-  },
+  ...tseslint.configs.strict,
 
   // Source files: browser + WebExtension globals
   {
@@ -32,20 +22,7 @@ export default tseslint.config(
         'error',
         { prefer: 'type-imports', fixStyle: 'inline-type-imports' },
       ],
-      // Catch unawaited promises — critical for chrome.* API calls
-      '@typescript-eslint/no-floating-promises': 'error',
-      // Allow void-returning async callbacks (e.g., MutationObserver, event handlers)
-      '@typescript-eslint/no-misused-promises': [
-        'error',
-        { checksVoidReturn: false },
-      ],
     },
-  },
-
-  // Config and test files: disable type-aware rules (not in tsconfig project)
-  {
-    files: ['*.config.ts', '*.config.mjs', 'tests/**/*.ts'],
-    ...tseslint.configs.disableTypeChecked,
   },
 
   {

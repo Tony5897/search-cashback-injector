@@ -1,8 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "Search Cashback Injector",
-  "version": "0.2.0",
-  "description": "Detects supported merchants on Google Search results and surfaces inline cashback offers.",
+  "name": "PerkPop",
+  "version": "0.3.0",
+  "description": "PerkPop surfaces cashback offers inline on Google Search results so you never miss savings.",
+  "action": {
+    "default_title": "PerkPop – Cashback on Google Search"
+  },
   "permissions": ["storage"],
   "host_permissions": ["https://www.google.com/*"],
   "background": {

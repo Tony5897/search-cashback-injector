@@ -1,0 +1,19 @@
+PerkPop is a lightweight Chrome extension that detects supported online merchants in your Google Search results and displays a small cashback offer banner directly inline — so you see the savings opportunity before you even click through.
+
+How it works:
+• Open Google Search and search for anything you might want to buy.
+• If a supported merchant appears in the results, PerkPop injects a subtle cashback badge right next to that result.
+• No clicks, no popups, no redirects — the offer is just there.
+
+Privacy-first by design:
+• No account required. No sign-in.
+• No data collection of any kind.
+• Your search queries are never read, stored, or transmitted.
+• The merchant registry is bundled locally with the extension.
+• Chrome storage is used only to cache offer labels on your device for one hour.
+
+Permissions used:
+• storage — to cache offer data locally on your device.
+• google.com — to read merchant domain names from search result links and inject the cashback badge.
+
+This is an open-source portfolio project demonstrating Manifest V3 extension architecture, Shadow DOM UI injection, and configuration-driven merchant detection.

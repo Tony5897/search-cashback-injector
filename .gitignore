@@ -7,3 +7,4 @@ coverage/
 .env.local
 .claude/
 *.zip
+UNIVERSAL_GIT_POLICY.md

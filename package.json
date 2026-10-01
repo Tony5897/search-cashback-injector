@@ -2,11 +2,15 @@
   "name": "perkpop",
   "version": "0.3.0",
   "private": true,
-  "description": "PerkPop — MV3 Chrome extension that surfaces inline cashback offers on Google Search results.",
+  "description": "PerkPop — MV3 Chrome prototype showing synthetic cashback-style alerts; no payouts.",
+  "engines": {
+    "node": ">=22.12 <23",
+    "npm": ">=10 <12"
+  },
   "scripts": {
     "dev": "vite build --watch",
     "build": "vite build",
-    "preview": "vite build",
+    "test:browser": "npm run build && playwright test",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src tests --max-warnings 0",
     "lint:fix": "eslint src tests --fix",
@@ -18,14 +22,15 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
+    "@playwright/test": "^1.63.0",
     "@types/chrome": "^0.0.332",
     "@types/node": "^22.0.0",
-    "@vitest/coverage-v8": "^2.1.9",
+    "@vitest/coverage-v8": "^4.1.11",
     "eslint": "^9.0.0",
     "globals": "^15.0.0",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.0.0",
-    "vite": "^5.4.0",
-    "vitest": "^2.1.9"
+    "vite": "^6.4.3",
+    "vitest": "^4.1.11"
   }
 }

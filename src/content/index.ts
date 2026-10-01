@@ -77,7 +77,7 @@ function injectBanner(result: HTMLElement, label: string): void {
 
   const banner = document.createElement('div')
   banner.className = 'perkpop-banner'
-  banner.textContent = `\u{1F4B0} ${label}`
+  banner.textContent = `Demo only — ${label}. No cashback payouts.`
 
   shadow.append(style, banner)
   result.prepend(host)

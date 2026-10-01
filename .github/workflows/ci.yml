@@ -34,6 +34,12 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Install browser for extension integration
+        run: npx playwright install --with-deps chromium
+
+      - name: Browser integration
+        run: npm run test:browser
+
       - name: Verify dist artifacts
         run: |
           test -f dist/background.js || { echo "Missing dist/background.js"; exit 1; }

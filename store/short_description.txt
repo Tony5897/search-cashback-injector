@@ -1,1 +1,1 @@
-PerkPop shows you cashback offers inline on Google Search — right next to the results, before you click.
+Chrome prototype showing synthetic cashback-style alerts on Google Search. Demonstration only; no real offers or payouts.

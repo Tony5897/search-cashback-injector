@@ -1,6 +1,36 @@
 # PerkPop
 
-A Manifest V3 Chrome extension that detects supported merchants on Google Search results and surfaces inline cashback banners — so you never miss savings.
+A Manifest V3 Chrome technical prototype that detects supported merchants on Google Search results and surfaces synthetic cashback-style banners. No real offers, earnings, affiliate rewards, or payouts are provided.
+
+[Chrome Web Store](https://chromewebstore.google.com/detail/ekimnibfchbimneodlhbnlejhhnholkk) · [Privacy](PRIVACY.md) · [Source version](manifest.json)
+
+## Review locally
+
+[Recorded checks and limitations](REVIEW.md)
+
+Use Node 22.12+ (Node 22 LTS), npm 10 or 11, and current Chrome. No environment variables, API keys, account, or backend are required.
+
+```bash
+git clone --branch main https://github.com/Tony5897/search-cashback-injector.git
+cd search-cashback-injector
+npm ci
+npm run build
+npm run ci
+npm run test:coverage
+```
+
+Open `chrome://extensions`, enable Developer mode, choose **Load unpacked**, and select `dist/`. Open a new Google Search tab on `https://www.google.com/search`, for example searching for Nike shoes or Target. Supported organic results may show **Demo only** banners. Google's markup varies: detection currently targets `#rso .tF2Cxc`, and a page with different markup may show nothing. Reload the extension and search tab after rebuilding. `npm run dev` watches builds; it does not serve a preview website.
+
+For reproducible browser verification independent of Google's changing pages:
+
+```bash
+npx playwright install chromium
+npm run test:browser
+```
+
+The browser test loads the built extension in a disposable Chromium profile. It serves a controlled search-page fixture, exercises actual content-script/service-worker messaging and cache writes, checks repeated DOM changes for duplicate banners, and confirms unknown merchants produce no offer. It does not establish compatibility with every live Google layout. Run `npm run package` after building to create the local versioned ZIP; this does not submit a store update.
+
+Start with [content-script injection](src/content/index.ts), [cache and message boundary](src/background/index.ts), and [browser integration test](tests/browser/extension.spec.ts). Unit coverage is limited to `src/lib/**/*.ts`; it excludes the content-script and worker entrypoints. The browser test verifies those together separately. Package version `0.3.0` identifies source; local changes are not evidence of a published store update.
 
 This project is designed as a portfolio-grade engineering build focused on modern browser extension architecture, safe DOM injection, configuration-driven merchant handling, and production-minded frontend discipline.
 
@@ -51,7 +81,7 @@ Example:
 - Search: `running shoes`
 - Google result includes: `example-merchant.com`
 - Extension detects supported merchant
-- Banner appears: `Earn 4% cashback`
+- Banner appears with a `Demo only` prefix and an explicit `No cashback payouts` notice.
 
 ## Architecture Overview
 
@@ -103,7 +133,7 @@ A lightweight banner is injected into supported results using an isolated DOM st
 | Background Logic | MV3 Service Worker |
 | Storage | `chrome.storage.local` |
 | Testing | Vitest |
-| E2E Testing (planned) | Playwright |
+| Browser integration | Playwright with built extension and controlled fixtures |
 | CI | GitHub Actions |
 
 ## Initial Feature Set

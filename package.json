@@ -21,7 +21,7 @@
     "package": "cd dist && zip -r ../perkpop-0.3.0.zip . --exclude '*.DS_Store' --exclude '.gitkeep' && cd .."
   },
   "devDependencies": {
-    "@eslint/js": "^9.0.0",
+    "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.63.0",
     "@types/chrome": "^0.0.332",
     "@types/node": "^22.0.0",
